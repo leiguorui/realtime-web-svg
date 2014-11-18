@@ -21,4 +21,3 @@ after_success:
 env:
   global:
     secure: yA1Cpck8+5l2NC2HCtyt98TgeqVR9tAe5z7OcTaHWHNluslBkGlivNxcyvv7RI/8ctzWtWGGSSr6ofvm+MmZFFeDCHZhz8B2LfheT3Gni3kt4ZstRdEYTDjtpSFMpnubxU36/8RC8W1UjFfHO8SA7NxlEvzbD8160/zU8vi4bls=
-
