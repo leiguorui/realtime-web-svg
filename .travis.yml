@@ -3,8 +3,8 @@ node_js:
 - 0.10
 
 before_install:
-- git config --global user.name "Green Lei"
-- git config --global user.email "leiguorui@goodow.com"
+- git config --global user.name "leiguorui"
+- git config --global user.email "degreelei@gmail.com"
 - git pull origin gh-pages
 
 before_script:
