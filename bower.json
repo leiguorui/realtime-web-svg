@@ -1,0 +1,9 @@
+{
+  "name": "realtime-web-svg",
+  "description": "realtime-web-svg",
+  "dependencies": {
+    "d3": "3.4.6",
+    "angular": "1.2.14",
+    "bootstrap": "3.1.1"
+  }
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
+    <style>
+        #container {
+            width: 800px;
+            height: 600px;
+            border: 1px solid silver;
+        }
+        path, line {
+            stroke: steelblue;
+            stroke-width: 1;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+
+<script src="http://cdn.sockjs.org/sockjs-0.3.4.min.js"></script>
+<script type="text/javascript" src="bower_components/d3/d3.js"></script>
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/js/vertxbus.js"></script>
+
+<script type="text/javascript">
+    var line;
+    var data;
+
+    var vis = d3.select("#container").append("svg")
+            .attr("width", 800)
+            .attr("height", 600)
+            .on("mousedown", mousedown)
+            .on("mouseup", mouseup);
+
+
+
+    function mousedown() {
+        var m = d3.mouse(this);
+        line = vis.append("line")
+                .attr("x1", m[0])
+                .attr("y1", m[1])
+                .attr("x2", m[0])
+                .attr("y2", m[1]);
+        vis.on("mousemove", mousemove);
+
+        data = {"x1":m[0],"y1":m[1],"x2":m[0],"y2":m[1]}
+    }
+
+    function mousemove() {
+        var m = d3.mouse(this);
+        line.attr("x2", m[0])
+            .attr("y2", m[1]);
+
+        data.x2 = m[0];
+        data.y2 = m[1];
+    }
+
+    function mouseup() {
+        vis.on("mousemove", null);
+        publish('1111',  data);
+    }
+
+    var eb = null;
+
+    function publish(address,  message) {
+        if (eb) {
+            var json = {text: message};
+            eb.publish(address, json);
+            $('#sent').append($("<code>").text("Address:" + address + " Message:" + message));
+            $('#sent').append($("</code><br>"));
+        }
+    }
+
+    function subscribe(address) {
+        if (eb) {
+            eb.registerHandler(address, function(msg, replyTo) {
+                console.log("msg");
+                vis.append("line")
+                    .attr("x1", msg.text.x1)
+                    .attr("y1", msg.text.y1)
+                    .attr("x2", msg.text.x2)
+                    .attr("y2", msg.text.y2);
+            });
+        }
+    }
+
+    function closeConn() {
+        if (eb) {
+            eb.close();
+        }
+    }
+
+    function openConn() {
+        if (!eb) {
+            eb = new vertx.EventBus("http://lgr.goodow.com:8080/eventbus");
+
+            eb.onopen = function() {
+                $("#status_info").text("Connected");
+                subscribe("1111");
+            };
+
+            eb.onclose = function() {
+                $("#status_info").text("Not connected");
+                eb = null;
+            };
+        }
+    }
+
+    openConn();
+</script>
+</body>
+</html>
