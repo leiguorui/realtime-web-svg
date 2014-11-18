@@ -5,6 +5,7 @@ node_js:
 before_install:
 - git config --global user.name "leiguorui"
 - git config --global user.email "degreelei@gmail.com"
+- git remote set-url origin "https://${GH_TOKEN}@github.com/leiguorui/realtime-web-svg.git"
 - git pull origin master
 
 before_script:
